@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Status</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .battery-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 200px;
+        }
+        .battery {
+            width: 80%;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #eee;
+            position: relative;
+        }
+        .battery-level {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+        .percentage {
+            font-size: 14px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Battery Status</h1>
+        <div class="battery-container">
+            <div class="battery">
+                <div class="battery-level" id="battery-level"></div>
+            </div>
+            <p class="percentage" id="battery-percentage">0%</p>
+        </div>
+        <p id="charging-status">Charging Status: Unknown</p>
+    </div>
+    <script>
+        window.onload = function() {
+      const batteryLevel = document.getElementById('battery-level');
+      const chargingStatus = document.getElementById('charging-status');
+      const batteryPercentage = document.getElementById('battery-percentage');
+      navigator.getBattery().then(battery => {
+        function updateBatteryStatus() {
+          const level = (battery.level * 100).toFixed(0);
+          batteryLevel.style.width = level + '%';
+          batteryPercentage.textContent = level + '%';
+          chargingStatus.textContent = battery.charging ? 'Charging' : 'Not Charging';
+        }
+        updateBatteryStatus();
+        battery.addEventListener('levelchange', updateBatteryStatus);
+        battery.addEventListener('chargingchange', updateBatteryStatus);
+      });
+    };
+    </script>
+</body>
+</html>
